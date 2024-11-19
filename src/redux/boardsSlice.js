@@ -6,8 +6,10 @@ console.log(data, "data");
 const boardsSlice = createSlice({
   name: "boards",
   initialState: data.boards,
+
   reducers: {
     addBoard: (state, action) => {
+      console.log(state, "state from board slice intial state");
       const isActive = state.length > 0 ? false : true;
       const payload = action.payload;
       const board = {
@@ -27,6 +29,7 @@ const boardsSlice = createSlice({
     deleteBoard: (state) => {
       const board = state.find((board) => board.isActive);
       state.splice(state.indexOf(board), 1);
+      console.log(state, "state from boardSlice");
     },
     setBoardActive: (state, action) => {
       state.map((board, index) => {
@@ -80,6 +83,7 @@ const boardsSlice = createSlice({
       const task = col.tasks.find((task, i) => i === payload.taskIndex);
       const subtask = task.subtasks.find((subtask, i) => i === payload.index);
       subtask.isCompleted = !subtask.isCompleted;
+      console.log(subtask.isCompleted, "subTask is completed from slice");
     },
     setTaskStatus: (state, action) => {
       const payload = action.payload;

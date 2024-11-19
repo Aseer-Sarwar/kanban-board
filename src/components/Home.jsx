@@ -26,6 +26,8 @@ function Home() {
 
   const [isBoardModalOpen, setIsBoardModalOpen] = useState(false);
 
+  console.log(isBoardModalOpen, "is board modal open");
+
   const boards = useSelector((state) => state.boards);
   const board = boards.find((board) => board.isActive === true);
   const columns = board ? board.columns : [];
@@ -59,17 +61,21 @@ function Home() {
               </Col>
             ))}
             {/* Add New Column */}
-            <Col
+            {/* <Col
               xs={12}
               md={4}
-              className="d-flex justify-content-center align-items-center text-muted bg-light p-4 rounded"
-              style={{ cursor: "pointer" }}
+              className="d-flex justify-content-center align-items-center text-muted bg-primary p-4 rounded"
+              style={{ cursor: "pointer", border: "2px solid green" }}
               onClick={() => setIsBoardModalOpen(true)}
             >
-              <Button variant="outline-primary" size="lg">
+              <Button
+                variant="outline-primary"
+                style={{ color: "whitesmoke" }}
+                size="lg"
+              >
                 + New Column
               </Button>
-            </Col>
+            </Col> */}
           </>
         ) : (
           <EmptyBoard type="edit" />
@@ -77,12 +83,12 @@ function Home() {
       </Row>
 
       {/* Add/Edit Board Modal */}
-      {isBoardModalOpen && (
+      {/* {isBoardModalOpen && (
         <AddEditBoardModal
           type="edit"
           setIsBoardModalOpen={setIsBoardModalOpen}
         />
-      )}
+      )} */}
     </Container>
   );
 }

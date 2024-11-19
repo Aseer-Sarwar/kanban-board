@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ElipsisMenu from "../components/ElipsisMenu";
-import elipsis from "../assets/icon-vertical-ellipsis.svg";
+// import elipsis from "../assets/icon-vertical-ellipsis.svg";
 import boardsSlice from "../redux/boardsSlice";
 import Subtask from "../components/Subtask";
 import AddEditTaskModal from "./AddEditTaskModal";
@@ -77,16 +77,24 @@ function TaskModal({ taskIndex, colIndex, setIsTaskModalOpen }) {
         className="text-dark"
       >
         <Modal.Header closeButton>
-          <Modal.Title className="fw-bold">{task.title}</Modal.Title>
+          <Modal.Title className="fw-bold" style={{ marginRight: 100 }}>
+            {" "}
+            {task.title}
+          </Modal.Title>
           <img
-            src={elipsis}
+            src="/icon-vertical-ellipsis (1).svg"
             alt="ellipsis"
             className="cursor-pointer ms-2"
             onClick={() => setIsElipsisMenuOpen((prev) => !prev)}
-            style={{ height: "24px" }}
+            style={{ height: "24px", marginLeft: 30, cursor: "pointer" }}
           />
           {isElipsisMenuOpen && (
-            <Dropdown.Menu show align="end" className="position-absolute">
+            <Dropdown.Menu
+              show
+              align="end"
+              className="position-absolute"
+              style={{ marginLeft: 500 }}
+            >
               <Dropdown.Item onClick={setOpenEditModal}>
                 Edit Task
               </Dropdown.Item>
@@ -142,6 +150,7 @@ function TaskModal({ taskIndex, colIndex, setIsTaskModalOpen }) {
           type="edit"
           taskIndex={taskIndex}
           prevColIndex={colIndex}
+          task={task}
         />
       )}
     </>

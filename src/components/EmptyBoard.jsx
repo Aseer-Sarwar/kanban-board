@@ -12,7 +12,13 @@ function EmptyBoard({ type }) {
           ? "This board is empty. Create a new column to get started."
           : "There are no boards available. Create a new board to get started"}
       </h3>
-      <Button
+      {isBoardModalOpen && (
+        <AddEditBoardModal
+          type={type}
+          setIsBoardModalOpen={setIsBoardModalOpen}
+        />
+      )}
+      {/* <Button
         variant={type === "edit" ? "primary" : "success"}
         className="mt-4"
         onClick={() => setIsBoardModalOpen(true)}
@@ -35,7 +41,7 @@ function EmptyBoard({ type }) {
             setIsBoardModalOpen={setIsBoardModalOpen}
           />
         </Modal.Body>
-      </Modal>
+      </Modal> */}
     </div>
   );
 }

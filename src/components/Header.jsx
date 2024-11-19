@@ -5,6 +5,7 @@ import AddEditTaskModal from "../modals/AddEditTaskModal";
 import AddEditBoardModal from "../modals/AddEditBoardModal";
 import DeleteModal from "../modals/DeleteModal";
 import ElipsisMenu from "./ElipsisMenu";
+import boardsSlice from "../redux/boardsSlice";
 
 const Header = ({ setIsBoardModalOpen, isBoardModalOpen }) => {
   const [openDropdown, setOpenDropdown] = useState(false);
@@ -12,6 +13,7 @@ const Header = ({ setIsBoardModalOpen, isBoardModalOpen }) => {
   const [boardType, setBoardType] = useState("add");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
+  console.log(isElipsisMenuOpen, "isElipseMenu");
 
   const dispatch = useDispatch();
 
@@ -100,7 +102,7 @@ const Header = ({ setIsBoardModalOpen, isBoardModalOpen }) => {
           style={{ cursor: "pointer", height: "24px" }}
           onClick={() => {
             setBoardType("edit");
-            setOpenDropdown(false);
+            // setOpenDropdown(false);
             setIsElipsisMenuOpen((prevState) => !prevState);
           }}
         />
@@ -122,11 +124,21 @@ const Header = ({ setIsBoardModalOpen, isBoardModalOpen }) => {
       )}
 
       {/* Task Modal */}
-      <Modal
+      {isTaskModalOpen && (
+        <AddEditTaskModal
+          setIsAddTaskModalOpen={setIsTaskModalOpen}
+          type="add"
+          device="mobile"
+        />
+      )}
+      {/* <Modal
         show={isTaskModalOpen}
         onHide={() => setIsTaskModalOpen(false)}
         centered
       >
+        <Modal.Header closeButton>
+          <Modal.Title>Add New Task</Modal.Title>
+        </Modal.Header>
         <Modal.Body>
           <AddEditTaskModal
             setIsAddTaskModalOpen={setIsTaskModalOpen}
@@ -134,10 +146,17 @@ const Header = ({ setIsBoardModalOpen, isBoardModalOpen }) => {
             device="mobile"
           />
         </Modal.Body>
-      </Modal>
+      </Modal> */}
 
       {/* Board Modal */}
-      <Modal
+      {isBoardModalOpen && (
+        <AddEditBoardModal
+          setBoardType={setBoardType}
+          type={boardType}
+          setIsBoardModalOpen={setIsBoardModalOpen}
+        />
+      )}
+      {/* <Modal
         show={isBoardModalOpen}
         onHide={() => setIsBoardModalOpen(false)}
         centered
@@ -154,26 +173,17 @@ const Header = ({ setIsBoardModalOpen, isBoardModalOpen }) => {
             setIsBoardModalOpen={setIsBoardModalOpen}
           />
         </Modal.Body>
-      </Modal>
+      </Modal> */}
 
       {/* Delete Modal */}
-      <Modal
-        show={isDeleteModalOpen}
-        onHide={() => setIsDeleteModalOpen(false)}
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Delete Board</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <DeleteModal
-            setIsDeleteModalOpen={setIsDeleteModalOpen}
-            type="board"
-            title={board.name}
-            onDeleteBtnClick={onDeleteBtnClick}
-          />
-        </Modal.Body>
-      </Modal>
+      {isDeleteModalOpen && (
+        <DeleteModal
+          setIsDeleteModalOpen={setIsDeleteModalOpen}
+          type="board"
+          title={board.name}
+          onDeleteBtnClick={onDeleteBtnClick}
+        />
+      )}
     </Navbar>
   );
 };

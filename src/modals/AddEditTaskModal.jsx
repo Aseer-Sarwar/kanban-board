@@ -11,70 +11,67 @@ function AddEditTaskModal({
   setIsAddTaskModalOpen,
   taskIndex,
   prevColIndex = 0,
+  task,
 }) {
   const dispatch = useDispatch();
-  const [isFirstLoad, setIsFirstLoad] = useState(true);
+  // const [title, setTitle] = useState("");
+  // const [description, setDescription] = useState("");
   const [isValid, setIsValid] = useState(true);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const board = useSelector((state) => state.boards).find(
-    (board) => board.isActive
+  // const [subtasks, setSubtasks] = useState([
+  //   { title: "", isCompleted: false, id: uuidv4() },
+  //   { title: "", isCompleted: false, id: uuidv4() },
+  // ]);
+  const [title, setTitle] = useState(type === "edit" ? task.title : "");
+  const [description, setDescription] = useState(
+    type === "edit" ? task.description : ""
+  );
+  const [subtasks, setSubtasks] = useState(
+    type === "edit"
+      ? task.subtasks.map((subtask) => ({
+          ...subtask,
+          id: subtask.id || uuidv4(), // Ensure each subtask has a unique ID
+        }))
+      : [{ title: "", isCompleted: false, id: uuidv4() }]
   );
 
-  const columns = board.columns;
-  const col = columns.find((col, index) => index === prevColIndex);
-  const task = col ? col.tasks.find((task, index) => index === taskIndex) : [];
-  const [status, setStatus] = useState(columns[prevColIndex].name);
+  const board = useSelector((state) => state.boards.find((b) => b.isActive));
+  console.log(board, "board from add/edit task modal");
+  const columns = board?.columns || [];
+  console.log(columns, "columns from add/edit task modal");
+  // const [status, setStatus] = useState(columns[prevColIndex]?.name || "");
+  const [status, setStatus] = useState(
+    type === "edit" ? task.status : columns[prevColIndex]?.name || ""
+  );
+
   const [newColIndex, setNewColIndex] = useState(prevColIndex);
-  const [subtasks, setSubtasks] = useState([
-    { title: "", isCompleted: false, id: uuidv4() },
-    { title: "", isCompleted: false, id: uuidv4() },
-  ]);
-
-  const onChangeSubtasks = (id, newValue) => {
-    setSubtasks((prevState) => {
-      const newState = [...prevState];
-      const subtask = newState.find((subtask) => subtask.id === id);
-      subtask.title = newValue;
-      return newState;
-    });
-  };
-
-  const onChangeStatus = (e) => {
-    setStatus(e.target.value);
-    setNewColIndex(e.target.selectedIndex);
-  };
 
   const validate = () => {
-    setIsValid(false);
-    if (!title.trim()) {
-      return false;
-    }
-    for (let i = 0; i < subtasks.length; i++) {
-      if (!subtasks[i].title.trim()) {
-        return false;
-      }
-    }
+    if (!title.trim()) return false;
+    if (subtasks.some((subtask) => !subtask.title.trim())) return false;
     setIsValid(true);
     return true;
   };
 
-  if (type === "edit" && isFirstLoad) {
-    setSubtasks(
-      task.subtasks.map((subtask) => {
-        return { ...subtask, id: uuidv4() };
-      })
+  const handleSubtaskChange = (id, value) => {
+    setSubtasks((prev) =>
+      prev.map((subtask) =>
+        subtask.id === id ? { ...subtask, title: value } : subtask
+      )
     );
-    setTitle(task.title);
-    setDescription(task.description);
-    setIsFirstLoad(false);
-  }
-
-  const onDelete = (id) => {
-    setSubtasks((prevState) => prevState.filter((el) => el.id !== id));
   };
 
-  const onSubmit = (type) => {
+  const handleSubmit = () => {
+    if (!validate()) return;
+    console.log(
+      title,
+      description,
+      subtasks,
+      status,
+      taskIndex,
+      prevColIndex,
+      newColIndex
+    );
+
     if (type === "add") {
       dispatch(
         boardsSlice.actions.addTask({
@@ -98,8 +95,10 @@ function AddEditTaskModal({
         })
       );
     }
-  };
 
+    setIsAddTaskModalOpen(false);
+    if (type === "edit") setIsTaskModalOpen(false);
+  };
   return (
     <Modal
       show={true}
@@ -112,8 +111,7 @@ function AddEditTaskModal({
       </Modal.Header>
       <Modal.Body>
         <Form>
-          {/* Task Name */}
-          <Form.Group className="mb-3" controlId="task-name-input">
+          <Form.Group className="mb-3">
             <Form.Label>Task Name</Form.Label>
             <Form.Control
               type="text"
@@ -122,9 +120,7 @@ function AddEditTaskModal({
               onChange={(e) => setTitle(e.target.value)}
             />
           </Form.Group>
-
-          {/* Description */}
-          <Form.Group className="mb-3" controlId="task-description-input">
+          <Form.Group className="mb-3">
             <Form.Label>Description</Form.Label>
             <Form.Control
               as="textarea"
@@ -134,22 +130,25 @@ function AddEditTaskModal({
               onChange={(e) => setDescription(e.target.value)}
             />
           </Form.Group>
-
-          {/* Subtasks */}
           <Form.Label>Subtasks</Form.Label>
-          {subtasks.map((subtask, index) => (
-            <div key={index} className="d-flex align-items-center mb-3">
+          {subtasks.map((subtask) => (
+            <div key={subtask.id} className="d-flex align-items-center mb-3">
               <Form.Control
                 type="text"
-                placeholder="e.g. Take coffee break"
                 value={subtask.title}
-                onChange={(e) => onChangeSubtasks(subtask.id, e.target.value)}
-                className="me-2"
+                onChange={(e) =>
+                  handleSubtaskChange(subtask.id, e.target.value)
+                }
+                placeholder="Subtask title"
               />
               <Button
                 variant="danger"
-                onClick={() => onDelete(subtask.id)}
-                className="px-3"
+                className="ms-2"
+                onClick={() =>
+                  setSubtasks((prev) =>
+                    prev.filter((st) => st.id !== subtask.id)
+                  )
+                }
               >
                 ×
               </Button>
@@ -157,24 +156,28 @@ function AddEditTaskModal({
           ))}
           <Button
             variant="outline-primary"
+            className="w-100"
             onClick={() =>
-              setSubtasks((state) => [
-                ...state,
+              setSubtasks((prev) => [
+                ...prev,
                 { title: "", isCompleted: false, id: uuidv4() },
               ])
             }
-            className="w-100 mb-3"
           >
-            + Add New Subtask
+            + Add Subtask
           </Button>
-
-          {/* Current Status */}
-          <Form.Group controlId="select-status">
+          <Form.Group className="mt-3">
             <Form.Label>Current Status</Form.Label>
-            <Form.Select value={status} onChange={onChangeStatus}>
-              {columns.map((column, index) => (
-                <option key={index} value={column.name}>
-                  {column.name}
+            <Form.Select
+              value={status}
+              onChange={(e) => {
+                setStatus(e.target.value);
+                setNewColIndex(e.target.selectedIndex);
+              }}
+            >
+              {columns.map((col, idx) => (
+                <option key={idx} value={col.name}>
+                  {col.name}
                 </option>
               ))}
             </Form.Select>
@@ -188,17 +191,7 @@ function AddEditTaskModal({
         >
           Cancel
         </Button>
-        <Button
-          variant="primary"
-          onClick={() => {
-            const isValid = validate();
-            if (isValid) {
-              onSubmit(type);
-              setIsAddTaskModalOpen(false);
-              if (type === "edit") setIsTaskModalOpen(false);
-            }
-          }}
-        >
+        <Button variant="primary" onClick={handleSubmit}>
           {type === "edit" ? "Save Changes" : "Create Task"}
         </Button>
       </Modal.Footer>

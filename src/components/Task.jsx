@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 // import TaskModal from "../modals/TaskModal";
 import { Card } from "react-bootstrap";
+import TaskModal from "../modals/TaskModal";
 
 function Task({ colIndex, taskIndex }) {
   const boards = useSelector((state) => state.boards);
@@ -34,7 +35,7 @@ function Task({ colIndex, taskIndex }) {
         draggable
         onDragStart={handleOnDrag}
         className="mb-3 shadow-sm cursor-pointer"
-        style={{ width: "280px" }}
+        style={{ width: "280px", cursor: "pointer", border: "2px solid red" }}
       >
         <Card.Body className="p-3 bg-white text-dark dark:bg-secondary dark:text-light">
           <Card.Title className="h6 fw-bold">{task?.title}</Card.Title>
@@ -45,13 +46,13 @@ function Task({ colIndex, taskIndex }) {
       </Card>
 
       {/* Task Modal */}
-      {/* {isTaskModalOpen && (
+      {isTaskModalOpen && (
         <TaskModal
           colIndex={colIndex}
           taskIndex={taskIndex}
           setIsTaskModalOpen={setIsTaskModalOpen}
         />
-      )} */}
+      )}
     </div>
   );
 }

@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import { useDispatch, useSelector } from "react-redux";
 import Home from "./components/Home";
 import boardsSlice from "./redux/boardsSlice";
+import EmptyBoard from "./components/EmptyBoard";
 
 function App() {
   const [isBoardModalOpen, setIsBoardModalOpen] = useState(false);

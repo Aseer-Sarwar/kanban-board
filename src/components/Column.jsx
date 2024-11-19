@@ -7,22 +7,23 @@ import { Badge } from "react-bootstrap"; // Import Badge from React Bootstrap
 
 function Column({ colIndex }) {
   const colors = [
-    "danger", // red
-    "warning", // orange
-    "primary", // blue
-    "secondary", // gray
-    "success", // green
-    "info", // teal
-    "light", // light gray
-    "dark", // dark gray
-    "pink", // custom color
+    "danger",
+    "warning",
+    "primary",
+    "secondary",
+    "success",
+    "info",
+    "light",
+    "dark",
+    "pink",
   ];
-
+  console.log(colIndex, "colIndex from column");
   const dispatch = useDispatch();
   const [color, setColor] = useState(null);
   const boards = useSelector((state) => state.boards);
   const board = boards.find((board) => board.isActive === true);
   const col = board.columns.find((col, i) => i === colIndex);
+  console.log(col, "col from column");
 
   useEffect(() => {
     const randomColor = shuffle(colors).pop();
@@ -53,7 +54,7 @@ function Column({ colIndex }) {
       onDrop={handleOnDrop}
       onDragOver={handleOnDragOver}
       className="scrollbar-hide mx-5 pt-[90px] min-w-[280px]"
-      style={{ marginTop: 200 }}
+      style={{ marginTop: 200, border: "3px solid green" }}
     >
       <p className="font-semibold flex items-center gap-2 tracking-widest md:tracking-[.2em] text-[#828fa3]">
         {/* Use React Bootstrap's Badge component to create the circle */}
