@@ -50,26 +50,28 @@ function Column({ colIndex }) {
   };
 
   return (
-    <div
-      onDrop={handleOnDrop}
-      onDragOver={handleOnDragOver}
-      className="scrollbar-hide mx-5 pt-[90px] min-w-[280px]"
-      style={{ marginTop: 200, border: "3px solid green" }}
-    >
-      <p className="font-semibold flex items-center gap-2 tracking-widest md:tracking-[.2em] text-[#828fa3]">
-        {/* Use React Bootstrap's Badge component to create the circle */}
-        <Badge
-          pill
-          variant={color || "light"}
-          style={{ width: "20px", height: "20px", display: "inline-block" }}
-        />
-        {col.name} ({col.tasks.length})
-      </p>
+    <>
+      <div
+        onDrop={handleOnDrop}
+        onDragOver={handleOnDragOver}
+        className="scrollbar-hide mx-5 pt-[90px] min-w-[280px]"
+        style={{ marginTop: 200, border: "1px solid green" }}
+      >
+        <p className="font-semibold flex items-center gap-2 tracking-widest md:tracking-[.2em] text-[#828fa3]">
+          {/* Use React Bootstrap's Badge component to create the circle */}
+          <Badge
+            pill
+            variant={color || "light"}
+            style={{ width: "20px", height: "20px", display: "inline-block" }}
+          />
+          {col.name} ({col.tasks.length})
+        </p>
 
-      {col.tasks.map((task, index) => (
-        <Task key={index} taskIndex={index} colIndex={colIndex} />
-      ))}
-    </div>
+        {col.tasks.map((task, index) => (
+          <Task key={index} taskIndex={index} colIndex={colIndex} />
+        ))}
+      </div>
+    </>
   );
 }
 

@@ -1,8 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import data from "../../data.json";
 
-console.log(data, "data");
-
 const boardsSlice = createSlice({
   name: "boards",
   initialState: data.boards,
@@ -73,7 +71,9 @@ const boardsSlice = createSlice({
       const { colIndex, prevColIndex, taskIndex } = action.payload;
       const board = state.find((board) => board.isActive);
       const prevCol = board.columns.find((col, i) => i === prevColIndex);
+      console.log(prevCol, "prevcol from dragTask slice");
       const task = prevCol.tasks.splice(taskIndex, 1)[0];
+      console.log(task, "task from dragTask slice");
       board.columns.find((col, i) => i === colIndex).tasks.push(task);
     },
     setSubtaskCompleted: (state, action) => {

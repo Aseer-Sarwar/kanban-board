@@ -5,6 +5,7 @@ import Column from "./Column";
 import EmptyBoard from "./EmptyBoard";
 import Sidebar from "./Sidebar";
 import { Container, Row, Col, Button } from "react-bootstrap";
+import AddEditTaskModal from "../modals/AddEditTaskModal";
 
 function Home() {
   const [windowSize, setWindowSize] = useState([
@@ -34,12 +35,25 @@ function Home() {
 
   const [isSideBarOpen, setIsSideBarOpen] = useState(true);
 
+  async function postDragData(colData) {
+    const respponse = await fetch("http://localhost:3000/dragData", {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(colData),
+    });
+    const res = await respponse.json();
+    console.log(res, "restaurantttttttttttttttttt");
+  }
+
   return (
     <Container
       fluid
       className={`h-100 d-flex ${
         windowSize[0] >= 768 && isSideBarOpen ? "ml-md-4" : ""
-      } bg-light dark:bg-dark overflow-x-scroll`}
+      }  overflow-x-scroll`}
     >
       {/* Sidebar for Larger Screens */}
       {windowSize[0] >= 768 && (
@@ -53,6 +67,9 @@ function Home() {
 
       {/* Columns Section */}
       <Row className="flex-grow-1">
+        <button onClick={postDragData(columns)} style={{ marginTop: 200 }}>
+          post drag data
+        </button>
         {columns.length > 0 ? (
           <>
             {columns.map((col, index) => (

@@ -11,6 +11,8 @@ function Task({ colIndex, taskIndex }) {
   const col = columns.find((_, i) => i === colIndex);
   const task = col?.tasks.find((_, i) => i === taskIndex);
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
+  console.log("lets start tracking value");
+  console.log(colIndex, "colIndex", taskIndex, "taskIndex");
 
   let completed = 0;
   const subtasks = task?.subtasks || [];

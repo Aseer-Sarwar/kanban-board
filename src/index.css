@@ -1,38 +1,44 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+/* App.css */
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-/* #646cff */
-
-body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
+/* Default theme styles */
+.app-container {
+  transition: background-color 0.3s, color 0.3s;
+  min-height: 100vh; /* Ensures the container covers the entire viewport */
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* Light theme */
+.app-container.light {
+  background-color: #ffffff;
+  color: #000000;
 }
 
-.overflow-x-scroll {
-  overflow-x: scroll;
-  overflow-y: hidden;
+/* Dark theme */
+.app-container.dark {
+  background-color: #121212;
+  color: #ffffff;
 }
 
-.scrollbar-hide {
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-  scrollbar-width: none; /* Firefox */
+/* Ensure components inside respond to the theme */
+.app-container.light .header,
+.app-container.light .home,
+.app-container.light .empty-board {
+  background-color: #f8f9fa;
+  color: #000000;
 }
 
-.scrollbar-hide::-webkit-scrollbar {
-  display: none; /* Safari and Chrome */
+.app-container.dark .header,
+.app-container.dark .home,
+.app-container.dark .empty-board {
+  background-color: #343a40;
+  color: #ffffff;
+}
+
+.content.light {
+  background-color: white;
+  color: black;
+}
+
+.content.dark {
+  background-color: black;
+  color: white;
 }
