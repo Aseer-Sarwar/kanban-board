@@ -35,18 +35,18 @@ function Home() {
 
   const [isSideBarOpen, setIsSideBarOpen] = useState(true);
 
-  async function postDragData(colData) {
-    const respponse = await fetch("http://localhost:3000/dragData", {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify(colData),
-    });
-    const res = await respponse.json();
-    console.log(res, "restaurantttttttttttttttttt");
-  }
+  // async function postDragData(colData) {
+  //   const respponse = await fetch("http://localhost:3000/dragData", {
+  //     headers: {
+  //       Accept: "application/json",
+  //       "Content-Type": "application/json",
+  //     },
+  //     method: "POST",
+  //     body: JSON.stringify(colData),
+  //   });
+  //   const res = await respponse.json();
+  //   console.log(res, "restaurantttttttttttttttttt");
+  // }
 
   return (
     <Container
@@ -67,9 +67,9 @@ function Home() {
 
       {/* Columns Section */}
       <Row className="flex-grow-1">
-        <button onClick={postDragData(columns)} style={{ marginTop: 200 }}>
+        {/* <button onClick={postDragData(columns)} style={{ marginTop: 200 }}>
           post drag data
-        </button>
+        </button> */}
         {columns.length > 0 ? (
           <>
             {columns.map((col, index) => (
